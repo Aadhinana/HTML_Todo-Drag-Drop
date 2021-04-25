@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="styles.css" />
+    <title>Drag Drop</title>
+  </head>
+  <body>
+    <main class="container">
+      <article id="starting">
+        <h2 class="title">Starting</h2>
+        <form>
+          <input type="text" placeholder="Enter task here!" />
+        </form>
+        <div class="task" draggable="true">
+          Some random thing to do. How does it handle the space wrap thing?
+        </div>
+        <div class="task" draggable="true">Water the plants</div>
+      </article>
+      <article id="ongoing">
+        <h2 class="title">Ongoing</h2>
+
+        <div class="task" draggable="true">Feed the dog</div>
+        <div class="task" draggable="true">Cook food</div>
+      </article>
+      <article id="completed">
+        <h2 class="title">Completed</h2>
+
+        <div class="task" draggable="true">Workout</div>
+        <div class="task" draggable="true">Finish up work</div>
+      </article>
+    </main>
+
+    <script src="script.js"></script>
+  </body>
+</html>
