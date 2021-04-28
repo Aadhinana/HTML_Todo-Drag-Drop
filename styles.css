@@ -45,3 +45,7 @@ input.error{
   border: 1px solid red;
   background-color: rgba(255,0,0, 0.3);
 }
+
+.dragging{
+  background-color: red;
+}

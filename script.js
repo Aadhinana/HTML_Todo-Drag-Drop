@@ -3,15 +3,19 @@ const draggableElements = document.querySelectorAll(".task");
 
 draggableElements.forEach((element) => {
   element.addEventListener("dragstart", function (e) {
+    // Add a dragging class to indicate the dragged element
+    this.classList.toggle("dragging");
+    // Remove the old task behind form the place taken
     setTimeout(() => {
       this.style.display = "none";
     }, 0);
   });
 
   element.addEventListener("dragend", function (e) {
+    this.classList.toggle("dragging");
+    // Add the task if not dropped elsewhere
     setTimeout(() => {
       this.style.display = "block";
-      this.closest("article").style.backgroundColor = "transparent";
     }, 0);
   });
 });
@@ -21,19 +25,28 @@ const dropZones = ["starting", "ongoing", "completed"];
 dropZones.forEach((element) => {
   const dropZoneElement = document.querySelector(`#${element}`);
 
+  // handle the acutal drop
   dropZoneElement.addEventListener("drop", function (e) {
     e.preventDefault();
-    this.style.backgroundColor = "transparent";
+    this.style.backgroundColor = "";
+    // Select the dragged element and add it to the new target
+    const draggedElement = document.querySelector('.dragging');
+    e.target.append(draggedElement)
   });
 
-  dropZoneElement.addEventListener("dragenter", function (e) {
+  // Prevent default to allow for drop zones
+  dropZoneElement.addEventListener("dragover", function (e) {
     e.preventDefault();
+  });
+
+  // highlight the drop zone
+  dropZoneElement.addEventListener("dragenter", function (e) {
     this.style.backgroundColor = "limegreen";
   });
 
+  // remove the highlight from the drop zone
   dropZoneElement.addEventListener("dragleave", function (e) {
-    e.preventDefault();
-    this.style.backgroundColor = "transparent";
+    this.style.backgroundColor = "";
   });
 });
 
