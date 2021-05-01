@@ -96,11 +96,40 @@ document.querySelector("form").addEventListener("submit", function (e) {
   storeTaskInitially(taskInput);
   input.value = "";
   // create a new element and add to this starting tab
+  const div = createTask(taskInput);
+  document.querySelector("#starting").append(div);
+});
+
+function createTask(taskInput) {
   const div = document.createElement("div");
   div.classList.add("task");
   div.setAttribute("draggable", "true");
   div.innerHTML = taskInput;
-  document.querySelector("#starting").append(div);
+  return div;
+}
+
+// Get selectors for different tabs. --> Can do better for cleanups
+const starting = document.querySelector("#starting");
+const ongoing = document.querySelector("#ongoing");
+const tasks = document.querySelector("#tasks");
+
+// INIT APP GET FROM LOCAL AND UPDATE TASKS
+document.addEventListener("DOMContentLoaded", function (e) {
+  const todos = JSON.parse(localStorage.getItem(LOCAL_STORAGE_ID)) || [];
+  todos.forEach((todo) => {
+    const div = createTask(todo.task);
+    switch (todo.tab) {
+      case "starting":
+        starting.append(div);
+        break;
+      case "ongoing":
+        ongoing.append(div);
+        break;
+      case "completed":
+        tasks.append(div);
+        break;
+    }
+  });
 });
 
 // LOCAL STORAGE STUFF
