@@ -45,15 +45,19 @@ dropZones.forEach((element) => {
       }
       this.append(draggedElement);
     }
+    /* DELETE TASKS */
+    if (e.target.id === "delete-bin") {
+      // console.log('YES')
+      const draggedElement = document.querySelector(".dragging");
+      if (draggedElement != null) {
+        draggedElement.parentElement.removeChild(draggedElement);
+      }
+    }
   });
 
   // Prevent default to allow for drop zones
   dropZoneElement.addEventListener("dragover", function (e) {
     e.preventDefault();
-  });
-
-  // highlight the drop zone
-  dropZoneElement.addEventListener("dragenter", function (e) {
     this.style.backgroundColor = "#b6e8a7";
   });
 
@@ -63,26 +67,13 @@ dropZones.forEach((element) => {
   });
 });
 
-// DELETE FUNCTIONS
-const deleteBin = document.querySelector("#delete-bin");
-deleteBin.addEventListener("dragover", function (e) {
-  e.preventDefault();
-  if (e.target.id === "delete-bin") {
-    // console.log('YES')
-    const draggedElement = document.querySelector(".dragging");
-    if (draggedElement != null) {
-      draggedElement.parentElement.removeChild(draggedElement);
-    }
-  }
-});
-
+// Handle submits for input
 const input = document.querySelector("input");
 // input focus clears value set
 input.addEventListener("click", function () {
   this.value = "";
 });
 
-// Handle submits for input
 document.querySelector("form").addEventListener("submit", function (e) {
   e.preventDefault();
   // Add validation to prevent from empty strings here
@@ -96,6 +87,7 @@ document.querySelector("form").addEventListener("submit", function (e) {
     return;
   }
   const taskInput = input.value;
+  storeTaskInitially(taskInput);
   input.value = "";
   // create a new element and add to this starting tab
   const div = document.createElement("div");
@@ -104,3 +96,21 @@ document.querySelector("form").addEventListener("submit", function (e) {
   div.innerHTML = taskInput;
   document.querySelector("#starting").append(div);
 });
+
+// LOCAL STORAGE STUFF
+const LOCAL_STORAGE_ID = "[NEW_TAB_TODOS] todos";
+
+function getFromStorage() {
+  const todos = JSON.parse(localStorage.getItem(LOCAL_STORAGE_ID)) || [];
+  return todos;
+}
+
+function storeToStorage(todosArr) {
+  localStorage.setItem(LOCAL_STORAGE_ID, JSON.stringify(todosArr));
+}
+
+function storeTaskInitially(task) {
+  const todos = getFromStorage();
+  todos.push({ task, tab: "starting" });
+  storeToStorage(todos);
+}
