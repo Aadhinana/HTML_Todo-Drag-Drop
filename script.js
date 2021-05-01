@@ -38,6 +38,10 @@ dropZones.forEach((element) => {
     ) {
       // Select the dragged element and add it to the new target
       const draggedElement = document.querySelector(".dragging");
+      console.log(
+        `${draggedElement.outerText.trim()} is dragged to ${this.id}`
+      );
+      udpateLocalStorage(draggedElement.outerText.trim(), this.id, "moved");
       // Check if its the completed tab and append to #tasks or else append normally
       if (this.firstElementChild.id === "tasks") {
         this.firstElementChild.append(draggedElement);
@@ -49,6 +53,8 @@ dropZones.forEach((element) => {
     if (e.target.id === "delete-bin") {
       // console.log('YES')
       const draggedElement = document.querySelector(".dragging");
+      console.log(`${draggedElement.outerText.trim()} is going to be trashed`);
+      udpateLocalStorage(draggedElement.outerText.trim(), undefined, "removed");
       if (draggedElement != null) {
         draggedElement.parentElement.removeChild(draggedElement);
       }
@@ -113,4 +119,26 @@ function storeTaskInitially(task) {
   const todos = getFromStorage();
   todos.push({ task, tab: "starting" });
   storeToStorage(todos);
+}
+
+function udpateLocalStorage(task, tab, mode) {
+  // Handle when tasks are moved
+  if (mode === "moved") {
+    const todos = getFromStorage();
+    const index = todos.findIndex((ele) => ele.task === task);
+    // if index == -1 handle if such a task not there in LS.
+    todos[index] = {
+      task,
+      tab,
+    };
+    storeToStorage(todos);
+  }
+  // Tasks are removed
+  else if (mode === "removed") {
+    const todos = getFromStorage();
+    const index = todos.findIndex((ele) => ele.task === task);
+    // Handle -1 if not there. can be ignored too
+    todos.splice(index, 1);
+    storeToStorage(todos);
+  }
 }
